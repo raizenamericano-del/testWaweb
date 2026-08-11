@@ -1,0 +1,254 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * Theming works by swapping colour *channels*, not by writing a light
+   * variant of every component. Tailwind's `ink`, `slate` and `white` tokens
+   * all resolve to the vars below, so `bg-ink-900` / `text-slate-400` /
+   * `bg-white/[0.04]` automatically mean the right thing in both themes.
+   *   - ink ramp: 950 = deepest page tone ... 500 = lightest chrome
+   *   - slate ramp is INVERTED in light mode (100 stays "primary text")
+   *   - white is the hairline/overlay tint; it flips to ink in light mode
+   */
+  :root {
+    color-scheme: dark;
+
+    --k-950: 5 7 12;
+    --k-900: 8 11 18;
+    --k-850: 11 15 24;
+    --k-800: 15 20 32;
+    --k-750: 20 26 41;
+    --k-700: 26 34 51;
+    --k-600: 36 48 68;
+    --k-500: 51 65 90;
+
+    --s-50: 248 250 252;
+    --s-100: 233 239 248;
+    --s-200: 226 232 240;
+    --s-300: 203 213 225;
+    --s-400: 148 163 184;
+    --s-500: 122 137 158;
+    --s-600: 71 85 105;
+    --s-700: 51 65 85;
+    --s-800: 30 41 59;
+    --s-900: 15 23 42;
+    --s-950: 2 6 23;
+
+    --c-white: 255 255 255;
+    --c-app: 5 7 12;
+
+    --t-200: 150 255 233;
+    --t-300: 77 252 219;
+    --a-200: 253 230 138;
+    --a-300: 252 211 77;
+    --r-300: 253 164 175;
+
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  html:not(.dark) {
+    color-scheme: light;
+
+    /* Cool near-white ramp; 950 is the page, 500 the most raised chrome. */
+    --k-950: 239 242 248;
+    --k-900: 247 249 252;
+    --k-850: 255 255 255;
+    --k-800: 255 255 255;
+    --k-750: 252 253 255;
+    --k-700: 241 245 250;
+    --k-600: 228 234 243;
+    --k-500: 214 222 234;
+
+    /* Inverted: 100 = darkest (primary text), 500 = mid muted. */
+    --s-50: 2 6 23;
+    --s-100: 15 23 42;
+    --s-200: 30 41 59;
+    --s-300: 51 65 85;
+    --s-400: 88 102 126;
+    --s-500: 110 124 148;
+    --s-600: 148 163 184;
+    --s-700: 176 189 206;
+    --s-800: 203 213 225;
+    --s-900: 226 232 240;
+    --s-950: 241 245 249;
+
+    /* Overlay tint becomes dark ink so /[0.04] still reads as a hairline. */
+    --c-white: 15 23 42;
+    --c-app: 239 242 248;
+
+    /* Darkened accents so labels keep AA contrast on white surfaces. */
+    --t-200: 5 132 115;
+    --t-300: 0 138 119;
+    --a-200: 146 86 6;
+    --a-300: 180 105 8;
+    --r-300: 190 40 65;
+
+    --glass-shadow: 0 8px 28px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-ink-950 text-slate-100 antialiased;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'ss01';
+    overscroll-behavior: none;
+  }
+
+  /* Scrollbars */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--s-400) / 0.28);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(31, 233, 200, 0.4);
+  }
+
+  /* Focus ring */
+  :focus-visible {
+    outline: 2px solid rgba(31, 233, 200, 0.65);
+    outline-offset: 2px;
+  }
+
+  input,
+  textarea,
+  button {
+    font: inherit;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply border border-white/[0.07] bg-white/[0.04] backdrop-blur-2xl;
+  }
+
+  .glass-strong {
+    @apply border border-white/10 bg-ink-850/80 backdrop-blur-2xl;
+  }
+
+  .panel {
+    @apply rounded-3xl border border-white/[0.07] bg-ink-900/70 shadow-glass backdrop-blur-2xl;
+  }
+
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+           transition-all duration-200 active:scale-[.97] disabled:pointer-events-none disabled:opacity-45;
+  }
+
+  .btn-primary {
+    @apply btn text-onaccent shadow-glow;
+    background-image: linear-gradient(120deg, #1fe9c8, #22d3ee 55%, #a98bff);
+    background-size: 160% 160%;
+  }
+  .btn-primary:hover {
+    background-position: 100% 0;
+    filter: brightness(1.06);
+  }
+
+  .btn-ghost {
+    @apply btn border border-white/10 bg-white/[0.04] text-slate-200 hover:bg-white/[0.09];
+  }
+
+  .btn-danger {
+    @apply btn border border-rose-500/30 bg-rose-500/12 text-rose-300 hover:bg-rose-500/22;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-slate-100
+           placeholder:text-slate-500 transition focus:border-kyy-400/60 focus:bg-white/[0.06] focus:outline-none;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05]
+           px-2.5 py-1 text-[11px] font-medium text-slate-300;
+  }
+
+  .muted {
+    @apply text-slate-400;
+  }
+
+  .surface {
+    @apply bg-ink-900;
+  }
+
+  .divide-line {
+    @apply border-white/[0.06];
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(120deg, #1fe9c8, #22d3ee 45%, #a98bff);
+  }
+
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.13) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+  }
+
+  /* Chat wallpaper */
+  .chat-canvas {
+    background-color: #070a11;
+    background-image:
+      radial-gradient(at 8% 4%, rgba(31, 233, 200, 0.07) 0px, transparent 45%),
+      radial-gradient(at 92% 96%, rgba(139, 92, 246, 0.08) 0px, transparent 45%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.022'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  html:not(.dark) .chat-canvas {
+    background-color: #eef2f8;
+    background-image:
+      radial-gradient(at 8% 4%, rgba(31, 233, 200, 0.14) 0px, transparent 45%),
+      radial-gradient(at 92% 96%, rgba(139, 92, 246, 0.12) 0px, transparent 45%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230f172a' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .bubble-out {
+    background-image: linear-gradient(135deg, rgba(31, 233, 200, 0.22), rgba(139, 92, 246, 0.2));
+    @apply border border-kyy-400/25;
+  }
+  html:not(.dark) .bubble-out {
+    background-image: linear-gradient(135deg, rgba(31, 233, 200, 0.3), rgba(139, 92, 246, 0.22));
+    @apply border-kyy-500/25;
+  }
+
+  .bubble-in {
+    @apply border border-white/[0.07] bg-ink-800/80;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .safe-b {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}

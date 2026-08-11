@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#05070c" />
+    <meta name="description" content="KyyWA — a modern, unofficial WhatsApp web client by KyyDevv." />
+    <title>KyyWA — by KyyDevv</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%231fe9c8'/%3E%3Cstop offset='1' stop-color='%23a98bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M50 4 89 27v46L50 96 11 73V27z' fill='url(%23g)'/%3E%3Cpath d='M38 28h9v19l16-19h11L57 49l18 24H64L47 51v22h-9z' fill='%2305070c'/%3E%3C/svg%3E"
+    />
+    <style>
+      /* Pre-hydration paint so there is never a white flash */
+      html { background: #05070c; }
+      #boot {
+        position: fixed; inset: 0; display: grid; place-items: center;
+        background: radial-gradient(at 20% 10%, rgba(31,233,200,.14), transparent 55%),
+                    radial-gradient(at 85% 20%, rgba(139,92,246,.16), transparent 50%), #05070c;
+        z-index: 60;
+      }
+      #boot .ring {
+        width: 46px; height: 46px; border-radius: 999px;
+        border: 2px solid rgba(255,255,255,.08); border-top-color: #1fe9c8;
+        animation: bootspin .9s linear infinite;
+      }
+      @keyframes bootspin { to { transform: rotate(360deg) } }
+    </style>
+  </head>
+  <body class="bg-ink-950">
+    <div id="root"></div>
+    <div id="boot"><div class="ring"></div></div>
+    <script>
+      // Restore theme before React mounts to avoid a flash of the wrong palette
+      try {
+        var t = localStorage.getItem('kyywa:theme') || 'dark'
+        document.documentElement.classList.toggle('dark', t !== 'light')
+      } catch (e) {}
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

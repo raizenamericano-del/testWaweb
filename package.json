@@ -1,0 +1,27 @@
+{
+  "name": "kyywa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "KyyWA — modern unofficial WhatsApp web client by KyyDevv",
+  "author": "KyyDevv",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently -n SERVER,CLIENT -c magenta,cyan \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "npm --workspace server run dev",
+    "dev:client": "npm --workspace client run dev",
+    "build": "npm --workspace client run build",
+    "start": "npm --workspace server run start",
+    "postinstall": "echo \"[KyyWA] deps installed\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
