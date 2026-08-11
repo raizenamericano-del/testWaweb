@@ -46,7 +46,8 @@ Crafted by **KyyDevv** · React + Vite + Tailwind + Framer Motion · Node.js + E
 
 ## Quick start (local)
 
-Requires **Node.js 20+**.
+Requires **Node.js 20.x** (pinned via `engines` and `.nvmrc`; Baileys' native deps are not yet
+reliable on Node 24).
 
 ```bash
 git clone <your-repo-url> kyywa
@@ -76,8 +77,15 @@ Open the app, choose **QR code** or **Pairing code**, and link the device from y
 ## Deploying to Railway
 
 1. **Create the service** — push this repo to GitHub and create a Railway project from it.
-   `railway.json` is already committed, so the build (`npm ci && npm run build`), the start command
+   `railway.json` is already committed, so the build (`npm run build`), the start command
    (`npm start`) and the healthcheck (`/api/health`) are configured for you.
+
+   > Nixpacks runs its own `npm ci` install phase before the build command, so `railway.json`
+   > deliberately runs **only** `npm run build`. Adding `npm ci &&` back makes the build fail with
+   > `EBUSY: resource busy or locked, rmdir '/app/node_modules/.cache'`, because the second install
+   > tries to remove a directory Docker has mounted as a cache volume.
+   > The committed `.npmrc` (`production=false`) is also required — without it a host that sets
+   > `NPM_CONFIG_PRODUCTION` drops the devDependencies and the build dies with `vite: not found`.
 
 2. **Add a Volume** — this is the important step. Without it the WhatsApp session is wiped on every
    deploy and you have to re-scan the QR code.
